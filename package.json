@@ -1,0 +1,20 @@
+{
+  "name": "betterplace-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "parthiv13 <kparthiv13@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.2",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "fast-csv": "^2.4.1",
+    "mongodb": "^3.1.13",
+    "morgan": "^1.9.1"
+  }
+}
