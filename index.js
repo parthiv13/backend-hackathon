@@ -9,6 +9,7 @@ const MongoClient = mongodb.MongoClient,
 databaseUrl = require('./database/config').url,
 collection_name = require('./database/config').collection_name,
 database_name = require('./database/config').database_name,
+apiChannel = require('./routes/apiChannel'),
 port = process.env.PORT || 8080;
 
 let TOTAL_DOCS;
@@ -19,6 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
 app.use(cors());
+
+//API Routes
+app.use('/api', apiChannel);
 
 app.get('/', (req, res) => {
     res.send('FO');
@@ -35,13 +39,14 @@ MongoClient.connect(databaseUrl, { useNewUrlParser: true })
 
 app.get('/channels', (req, res) => {
     let page = req.query.page;
+    let perPageItems = parseInt(req.query.items);
     MongoClient.connect(databaseUrl, { useNewUrlParser: true })
         .then(client => {
-            client.db(database_name).collection(collection_name).find({}).limit(15).skip(page*15).toArray()
+            client.db(database_name).collection(collection_name).find({}).limit(perPageItems).skip(page*perPageItems).toArray()
             .then(docs => {
-                res.setHeader('X-Total-Count', TOTAL_DOCS);
+                res.setHeader('x-total-count', TOTAL_DOCS);
                 res.send(docs);
-                console.log('sent')
+                console.log(`${res}`)
             }).catch(err => {
                 console.log(err);
                 res.send('Error at fetching docs');
