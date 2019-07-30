@@ -44,9 +44,8 @@ app.get('/channels', (req, res) => {
         .then(client => {
             client.db(database_name).collection(collection_name).find({}).limit(perPageItems).skip(page*perPageItems).toArray()
             .then(docs => {
-                res.setHeader('x-total-count', TOTAL_DOCS);
+                res.setHeader('X-Total-Count', TOTAL_DOCS);
                 res.send(docs);
-                console.log(`${res}`)
             }).catch(err => {
                 console.log(err);
                 res.send('Error at fetching docs');

@@ -10,7 +10,7 @@ router.get('/channel/:id', (req, res) => {
     MongoClient.connect(databaseUrl, { useNewUrlParser: true })
     .then(client => {
         client.db(database_name).collection(collection_name).findOne({ id: req.param.id })
-        then(doc => {
+        .then(doc => {
             res.send(doc);
         }).catch(err => {
             console.log(err);
@@ -21,6 +21,28 @@ router.get('/channel/:id', (req, res) => {
         res.send('Error connecting to Mongo server');
     });
 })
+
+router.get('/channel/search/:searchString', (req, res) => {
+    let searchString = req.params.searchString;
+    console.log(searchString);
+    MongoClient.connect(databaseUrl, { useNewUrlParser: true })
+    .then(client => {
+        client.db(database_name).collection(collection_name).find({ $text: {
+            $search: searchString,
+            $diacriticSensitive: true
+        }}).toArray()
+        .then(docs => {
+            res.send(docs);
+            console.log(docs.length);
+        }).catch(err => {
+            console.log(err);
+            res.send("Couldn't");
+        })
+    }).catch(err => {
+        console.log(err);
+        res.send('Error connecting to Mongo server');
+    })
+}) 
 
 router.put('/channel', (req, res) => {
     MongoClient.connect(databaseUrl, { useNewUrlParser: true })
