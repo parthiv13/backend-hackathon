@@ -2,6 +2,7 @@ const express = require('express'),
     router = express.Router(),
     mongodb = require('mongodb'),
     MongoClient = mongodb.MongoClient,
+    ObjectId = mongodb.ObjectID,
     databaseUrl = require('../database/config').url,
     database_name = require('../database/config').database_name,
     collection_name = require('../database/config').collection_name;
@@ -9,8 +10,9 @@ const express = require('express'),
 router.get('/channel/:id', (req, res) => {
     MongoClient.connect(databaseUrl, { useNewUrlParser: true })
     .then(client => {
-        client.db(database_name).collection(collection_name).findOne({ id: req.param.id })
+        client.db(database_name).collection(collection_name).find({ _id: req.param.id })
         .then(doc => {
+            console.log(doc)
             res.send(doc);
         }).catch(err => {
             console.log(err);
@@ -22,7 +24,7 @@ router.get('/channel/:id', (req, res) => {
     });
 })
 
-router.get('/channel/search/:searchString', (req, res) => {
+router.get('/channel', (req, res) => {
     let searchString = req.params.searchString;
     console.log(searchString);
     MongoClient.connect(databaseUrl, { useNewUrlParser: true })
